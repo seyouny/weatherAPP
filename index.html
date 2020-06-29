@@ -17,6 +17,8 @@
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
     <script>
         var cityHistory = [];
+        var lat = "";
+        var lon = "";
 
         $("#button").click(function(){
             cityName = $("#city").val();
@@ -34,18 +36,38 @@
                 console.log(response.main.temp);
                 console.log(response.main.humidity);
                 console.log(response.wind.speed);
+                localStorage.setItem("citylat",response.coord.lat);
+                localStorage.setItem("citylon",response.coord.lon);
 
+                var citylon = response.coord.lot;
+                //*** DISPLAY ON CARD
                 var cardClass = $("<div>");
                 cardClass.attr("class","card");
                 var cardBody = $("<div>");
                 cardBody.attr("class", "card-body");
+                cardBody.append("<h1>"+response.name+"</h1>");
                 cardBody.append("<p>"+ response.main.temp +"</p>");
                 cardClass.append(cardBody);
                 $(".container").append(cardClass)
-            })
-            
+                //***DISPLAY ON CARD
+
+            }) 
+            lat = localStorage.getItem("citylat");
+            lon = localStorage.getItem("citylon");
+            console.log(lat,lon)
+            nextDays();
         })
-        function forecast 
+        function nextDays(){
+            var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&appid=7d8a57cfe0185102716711da0a05d909";
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+            .then(function(response){
+                for (var i=0; i<5; i++)
+                console.log(response.daily[i].temp.day)
+            })
+        }
 //         <div class="card" style="width: 18rem;">
 //   <div class="card-body">
 //     <h5 class="card-title">Card title</h5>
