@@ -27,7 +27,7 @@
     </style>
 <body>
     <nav class="navbar navbar-light bg-dark" id= "Nav" style= "margin:0%;">
-        <span class="navbar-brand mb-0 h1 m-auto">Weather Dashboard</span>
+        <span class="navbar-brand mb-0 h1 m-auto" style= "color: white;">Weather Dashboard</span>
       </nav>
       <div class="container">
         <div class="row" >
@@ -52,10 +52,12 @@
     <!-- <script src="moment.js"></script> -->
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
     <script>
+        
         $("#buttonClear").click(function(){
+            
             window.location.href = "index.html"
         })
-
+        var indexToday ='';
         var cityHistory = [];
         var lat = "";
         var lon = "";
@@ -64,7 +66,12 @@
         var nowYear = currentDate.getFullYear();
         var nowMonth = currentDate.getMonth()+1;
         var fullDate = nowMonth + "/" + nowDay + "/" + nowYear;
+        // nextDay = new Date(currentDate);
+        // nextDay.setDate(currentDate.getDate() + 1);
+        // var nextDate = nextDay.getDate();
+        // var nextMonth = nextDay.getMonth()+1; 
         $("#button").click(function(){
+            $(".forecast").html("");
             cityName = $("#city").val();
             $("#city").val("")
             cityHistory.push(cityName);
@@ -93,17 +100,23 @@
                 cardBody.attr("class", "card-body");
                 cardBody.append("<h1>"+response.name+ " " +fullDate + "</h1> ");
                 cardBody.append("<p> Temperature: "+ response.main.temp +"</p>");
+                cardBody.append("<p> Humidity: "+ response.main.humidity +"</p>");
+
                 cardBody.append("<p> Wind: "+ response.wind.speed +"</p>");
+                cardBody.append("<p> UV Index: "+ indexToday +"</p>");
+
                 cardClass.append(cardBody);
                 cardClass.css("width","30rem")
                 $("#mainWeather").html(cardClass)
                 //***DISPLAY ON CARD
 
             }) 
+            
+
             lat = localStorage.getItem("citylat");
             lon = localStorage.getItem("citylon");
             console.log(lat,lon)
-            
+
             nextDays();
         })
         
@@ -115,29 +128,53 @@
             })
             .then(function(response){
                 for (var i=1; i<6; i++){
+                                       
                     var colClass = $("<div>");
-                    colClass.attr("class", "col-sm-2")
+                    colClass.attr("class", "col-3")
                     var tempMin = response.daily[i].temp.min;
                     var tempMax = response.daily[i].temp.max;
+                    var UVI = response.daily[i].uvi;
+                    var humidityF = response.daily[i].humidity;
+
                     var FcardText = $("<div>");
                     FcardText.attr("class","card-body");
+                    if (i != 1){ 
+                        nextDay = new Date(currentDate);
+                        nextDay.setDate(currentDate.getDate() + i);
+                        var nextDate = nextDay.getDate();
+                        var nextMonth = nextDay.getMonth()+1; 
+                        FcardText.append("<h3>"+nextMonth + "/" + (nextDate) + "/" + nowYear+"</h3>");
+
+                    }
+                    // else if (i!= 2) {
+
+                    // }
+                       
+                    else{
+                        FcardText.append("<h3>"+nowMonth + "/" + (nowDay) + "/" + nowYear+"</h3>");
+
+                    }
+
                     FcardText.append("<p> High: "+tempMax+"</p>");
                     FcardText.append("<p> Low: "+tempMin+"</p>");
+                    FcardText.append("<p> UV index: "+UVI+"</p>");
+                    FcardText.append("<p> Humidity: "+humidityF+"</p>");
+
                     var FcardClass = $("<div>");
                     FcardClass.attr("class","card")
                     FcardClass.append(FcardText);
                     colClass.append(FcardClass)
                     $(".forecast").append(colClass)
-
-                    
+                    console.log(response)
                 }
+                
                 console.log(response)
                 getHistory();
             })
         }
         function getHistory() {
             $(".historyButtons").html("")
-            $(".forecast").html("");
+            
             for (i in cityHistory){
                 var buttonSpace = $("<div>")
                 var cityButton = $("<BUTTON>");
@@ -146,29 +183,11 @@
                 cityName = cityHistory[i]
                 // if cityButton
                 $(".historyButtons").append(buttonSpace)
+                
             }
+            
         }
-                // var cardClass = $("<div>");
-                // cardClass.attr("class","card");
-                // var cardBody = $("<div>");
-                // cardBody.attr("class", "card-body");
-                // cardBody.append("<h1>"+response.name+ " " +fullDate + "</h1> ");
-                // cardBody.append("<p> Temperature: "+ response.main.temp +"</p>");
-                // cardBody.append("<p> Wind: "+ response.wind.speed +"</p>");
-                // cardClass.append(cardBody);
-                // cardClass.css("width","30rem")
-                // $("#mainWeather").html(cardClass)
-//         <div class="card" style="width: 18rem;">
-//   <div class="card-body">
-//     <h5 class="card-title">Card title</h5>
-//     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-//     <a href="#" class="card-link">Card link</a>
-//     <a href="#" class="card-link">Another link</a>
-//   </div>
-// </div>
             
     </script>
-    
 </body>
 </html>
