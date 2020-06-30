@@ -138,22 +138,14 @@
 
                     var FcardText = $("<div>");
                     FcardText.attr("class","card-body");
-                    if (i != 1){ 
-                        nextDay = new Date(currentDate);
-                        nextDay.setDate(currentDate.getDate() + i);
-                        var nextDate = nextDay.getDate();
-                        var nextMonth = nextDay.getMonth()+1; 
-                        FcardText.append("<h3>"+nextMonth + "/" + (nextDate) + "/" + nowYear+"</h3>");
 
-                    }
-                    // else if (i!= 2) {
+                    nextDay = new Date(currentDate);
+                    nextDay.setDate(currentDate.getDate() + i);
+                    var nextDate = nextDay.getDate();
+                    var nextMonth = nextDay.getMonth()+1; 
+                    FcardText.append("<h3>"+nextMonth + "/" + (nextDate) + "/" + nowYear+"</h3>");
 
-                    // }
-                       
-                    else{
-                        FcardText.append("<h3>"+nowMonth + "/" + (nowDay) + "/" + nowYear+"</h3>");
 
-                    }
 
                     FcardText.append("<p> High: "+tempMax+"</p>");
                     FcardText.append("<p> Low: "+tempMin+"</p>");
