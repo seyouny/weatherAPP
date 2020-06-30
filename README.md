@@ -28,17 +28,30 @@ WHEN I click on a city in the search history
 THEN I am again presented with current and future conditions for that city
 ```
 
-The following image demonstrates the application functionality:
+### Built With
 
-![weather dashboard demo](./Assets/06-server-side-apis-homework-demo.png)
+* [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
+* [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+* [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-## Review
 
-You are required to submit the following for review:
+### Deployed Link
 
-* The URL of the deployed application.
+https://seyouny.github.io/calendar/
+https://github.com/seyouny/calendar/
 
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+### Authors
 
+Seyoung Yoon
+
+- [Link to Github](https://github.com/seyouny)
+- [Link to LinkedIn](https://www.linkedin.com/in/stacey-yoon-bbaa7413a/)
+
+See also the list of contributors who participated in this project.
+
+### License
+This project is licensed under the MIT License
+
+###Acknowledgments
 - - -
 © 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
