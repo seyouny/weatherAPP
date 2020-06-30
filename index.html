@@ -80,7 +80,7 @@
             $("#city").val("")
             cityHistory.push(cityName);
             localStorage.setItem("history",cityHistory);
-            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q="+ cityName +"&appid=7d8a57cfe0185102716711da0a05d909";
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+ cityName +"&appid=7d8a57cfe0185102716711da0a05d909";
             $.ajax({
             url: queryURL,
             method: "GET"
