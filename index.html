@@ -4,76 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     </head>
+    <style>
+
+        .container{
+            margin:10%;
+            
+        }
+        #search{
+            border: 2px solid black;
+            padding: 3%;
+        }
+        #Nav{
+            margin-top: 0%;
+        }
+        /* .forecast{
+            float: right;
+
+        } */
+    </style>
 <body>
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-light bg-dark" id= "Nav" style= "margin:0%;">
         <span class="navbar-brand mb-0 h1 m-auto">Weather Dashboard</span>
       </nav>
- 
       <div class="container">
-          <div class="row">
-            <div class="col-3">
-                <input type="text" id="city" name="city" value=""><br>
-                <input id ="button" type="button" value="Submit">col1
-    
-            </div>
-            <div class="col-6">
-                <div class="row">
-                    <div class= "container" id= "mainWeather"></div>
-              <div class="row">
-                <div class= "forecast"></div>
-              </div>
-        </div>
+        <div class="row" >
+          <div class="col-sm-3"id= "search">
+            <input type="text" id="city" name="city" value=""><br>
+            <input id ="button" type="button" value="Submit">
+            <input id ="buttonClear" type="button" value="Clear">            
+            <br></br>
+            <div class= "historyButtons"></div>
           </div>
-
-    <div class="container">
-        
-    </div>
-
-
-     
-      
-
-        
-    <!-- </div> -->
-    <!-- <div class="container">
-          <div class="col">
-            <form>
-                <input type="text" id="city" name="city" value=""><br>
-                <input id ="button" type="button" value="Submit">
-              </form>
+          <div class="col-sm-9">
+            <div class= "container" id= "mainWeather" >Weather Information Will be Displayed Here</div>
+            <div class= "forecast"></div>
           </div>
-          <div class="col">
-            <div class="row">
-                <div class= "container" id= "mainWeather">
-                </div>
-                <div class="row">
-                    <div class= "forecast"></div>
-                </div>
-
-            </div>
-            
+          <!-- <div class="col-sm">
+            One of three columns
           </div> -->
-      </div>
-    
-
-
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-      
-
-
+        </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <script src="moment.js"></script> -->
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
     <script>
+        $("#buttonClear").click(function(){
+            window.location.href = "index.html"
+        })
+
         var cityHistory = [];
         var lat = "";
         var lon = "";
-
+        var currentDate = new Date();
+        var nowDay = currentDate.getDate();
+        var nowYear = currentDate.getFullYear();
+        var nowMonth = currentDate.getMonth()+1;
+        var fullDate = nowMonth + "/" + nowDay + "/" + nowYear;
         $("#button").click(function(){
             cityName = $("#city").val();
+            $("#city").val("")
             cityHistory.push(cityName);
             localStorage.setItem("history",cityHistory);
             var queryURL = "http://api.openweathermap.org/data/2.5/weather?q="+ cityName +"&appid=7d8a57cfe0185102716711da0a05d909";
@@ -93,22 +86,27 @@
 
                 var citylon = response.coord.lot;
                 //*** DISPLAY ON CARD
+                $
                 var cardClass = $("<div>");
                 cardClass.attr("class","card");
                 var cardBody = $("<div>");
                 cardBody.attr("class", "card-body");
-                cardBody.append("<h1>"+response.name+"</h1>");
-                cardBody.append("<p>"+ response.main.temp +"</p>");
+                cardBody.append("<h1>"+response.name+ " " +fullDate + "</h1> ");
+                cardBody.append("<p> Temperature: "+ response.main.temp +"</p>");
+                cardBody.append("<p> Wind: "+ response.wind.speed +"</p>");
                 cardClass.append(cardBody);
-                $("#mainWeather").append(cardClass)
+                cardClass.css("width","30rem")
+                $("#mainWeather").html(cardClass)
                 //***DISPLAY ON CARD
 
             }) 
             lat = localStorage.getItem("citylat");
             lon = localStorage.getItem("citylon");
             console.log(lat,lon)
+            
             nextDays();
         })
+        
         function nextDays(){
             var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&appid=7d8a57cfe0185102716711da0a05d909";
             $.ajax({
@@ -118,21 +116,48 @@
             .then(function(response){
                 for (var i=1; i<6; i++){
                     var colClass = $("<div>");
-                    colClass.attr("class","col-3");
-                    var cardForecast = $("<div>");
-                    cardForecast.attr("class","card");
-                    var cardBodyForecast = $("<div>");
-                    cardBodyForecast.attr("class", "card-body");
-                    cardBodyForecast.append("<p>"+response.daily[i].temp.day+"</p>");
-                    // cardBodyForecast.append("<p>"+ response.main.temp +"</p>");
-                    cardForecast.append(cardBodyForecast);
-                    colClass.append(cardForecast);
-                    $(".forecast").append(colClass);
+                    colClass.attr("class", "col-sm-2")
+                    var tempMin = response.daily[i].temp.min;
+                    var tempMax = response.daily[i].temp.max;
+                    var FcardText = $("<div>");
+                    FcardText.attr("class","card-body");
+                    FcardText.append("<p> High: "+tempMax+"</p>");
+                    FcardText.append("<p> Low: "+tempMin+"</p>");
+                    var FcardClass = $("<div>");
+                    FcardClass.attr("class","card")
+                    FcardClass.append(FcardText);
+                    colClass.append(FcardClass)
+                    $(".forecast").append(colClass)
+
+                    
                 }
                 console.log(response)
-               
+                getHistory();
             })
         }
+        function getHistory() {
+            $(".historyButtons").html("")
+            $(".forecast").html("");
+            for (i in cityHistory){
+                var buttonSpace = $("<div>")
+                var cityButton = $("<BUTTON>");
+                cityButton.text(cityHistory[i]);
+                buttonSpace.append(cityButton)
+                cityName = cityHistory[i]
+                // if cityButton
+                $(".historyButtons").append(buttonSpace)
+            }
+        }
+                // var cardClass = $("<div>");
+                // cardClass.attr("class","card");
+                // var cardBody = $("<div>");
+                // cardBody.attr("class", "card-body");
+                // cardBody.append("<h1>"+response.name+ " " +fullDate + "</h1> ");
+                // cardBody.append("<p> Temperature: "+ response.main.temp +"</p>");
+                // cardBody.append("<p> Wind: "+ response.wind.speed +"</p>");
+                // cardClass.append(cardBody);
+                // cardClass.css("width","30rem")
+                // $("#mainWeather").html(cardClass)
 //         <div class="card" style="width: 18rem;">
 //   <div class="card-body">
 //     <h5 class="card-title">Card title</h5>
